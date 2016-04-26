@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyPlaces</string>
+
+    <string name="new_place">New Place</string>
+    <string name="delete_place">Delete Place</string>
+</resources>
+
