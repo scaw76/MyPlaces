@@ -1,6 +1,7 @@
 package com.saracawley.myplaces;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -22,6 +25,7 @@ import java.util.List;
 public class MyPlaceListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PlaceAdapter mPlaceAdapter;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class MyPlaceListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_recycler_list,container,false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.chore_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         updateUI();
         return v;
     }
@@ -81,15 +86,27 @@ public class MyPlaceListFragment extends Fragment {
     private class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mNameTextView;
         private Place mPlace;
+        private File mPhotoFile;
+        private ImageView mPhotoView;
 
         public PlaceHolder(View itemView){
             super(itemView);
             itemView.setOnClickListener(this);
             mNameTextView = (TextView) itemView.findViewById(R.id.list_item_name);
+            mPhotoView = (ImageView) itemView.findViewById(R.id.image);
+
+
         }
         public void bindPlace(Place p){
             mPlace = p;
+            mPhotoFile = PlaceManger.get(getActivity()).getPhotoFile(mPlace);
             mNameTextView.setText(mPlace.getName());
+            if(mPhotoFile == null || !mPhotoFile.exists()){
+                mPhotoView.setImageDrawable(null);
+            }else{
+                Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+                mPhotoView.setImageBitmap(bitmap);
+            }
         }
 
         @Override

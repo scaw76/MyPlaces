@@ -55,4 +55,8 @@ public class Place {
     public void setLon(double lon) {
         mLon = lon;
     }
+
+    public String getPhotoFileName(){
+        return "IMG_" +getID().toString()+".jpg";
+    }
 }

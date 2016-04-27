@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.saracawley.myplaces.database.PlaceBaseHelper;
 import com.saracawley.myplaces.database.PlaceCursorWrapper;
 import com.saracawley.myplaces.database.PlaceDBSchema.PlaceTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -94,5 +96,12 @@ public class PlaceManger {
                 PlaceTable.NAME, null, whereClause,whereArgs, null,null,null
         );
         return new PlaceCursorWrapper(cursor);
+    }
+    public File getPhotoFile(Place p){
+        File externalFileDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if(externalFileDir == null){
+            return null;
+        }
+        return new File(externalFileDir, p.getPhotoFileName());
     }
 }

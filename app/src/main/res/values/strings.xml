@@ -3,5 +3,6 @@
 
     <string name="new_place">New Place</string>
     <string name="delete_place">Delete Place</string>
+    <string name="hint_place_name">Name</string>
 </resources>
 
