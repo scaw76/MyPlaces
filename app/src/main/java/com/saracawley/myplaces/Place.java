@@ -15,6 +15,10 @@ public class Place {
     public Place() {
         mID = UUID.randomUUID();
     }
+    public Place(UUID id){
+        mID = id;
+
+    }
 
     public UUID getID() {
         return mID;

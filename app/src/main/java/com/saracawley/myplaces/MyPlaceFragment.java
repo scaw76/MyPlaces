@@ -40,6 +40,13 @@ public class MyPlaceFragment extends Fragment {
         mPlace = PlaceManger.get(getActivity()).getPlace(place_id);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        PlaceManger.get(getActivity()).updatePlace(mPlace);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

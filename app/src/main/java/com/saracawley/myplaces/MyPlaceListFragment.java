@@ -73,6 +73,7 @@ public class MyPlaceListFragment extends Fragment {
             mPlaceAdapter = new PlaceAdapter(places);
             mRecyclerView.setAdapter(mPlaceAdapter);
         }else{
+            mPlaceAdapter.setPlaces(places);
             mPlaceAdapter.notifyDataSetChanged();
         }
 
@@ -119,6 +120,10 @@ public class MyPlaceListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mPlaces.size();
+        }
+
+        public void setPlaces(List<Place> places){
+            mPlaces = places;
         }
     }
 
