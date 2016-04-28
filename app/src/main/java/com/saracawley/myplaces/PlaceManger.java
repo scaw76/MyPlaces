@@ -95,6 +95,8 @@ public class PlaceManger {
         ContentValues values = new ContentValues();
         values.put(PlaceTable.Cols.UUID, place.getID().toString());
         values.put(PlaceTable.Cols.NAME, place.getName());
+        values.put(PlaceTable.Cols.LAT, place.getLat());
+        values.put(PlaceTable.Cols.LON, place.getLon());
 
         return values;
     }

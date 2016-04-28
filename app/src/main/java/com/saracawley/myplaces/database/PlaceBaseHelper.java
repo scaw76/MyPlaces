@@ -22,7 +22,9 @@ public class PlaceBaseHelper extends SQLiteOpenHelper{
         db.execSQL("create table "+ PlaceTable.NAME +"("+
                 "_id integer primary key autoincrement, " +
                 PlaceTable.Cols.UUID +", "+
-                PlaceTable.Cols.NAME +")"
+                PlaceTable.Cols.NAME + ", "+
+                PlaceTable.Cols.LAT + ", "+
+                PlaceTable.Cols.LON + ")"
 
         );
     }

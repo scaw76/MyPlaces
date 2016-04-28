@@ -19,9 +19,13 @@ public class PlaceCursorWrapper extends CursorWrapper {
     public Place getPlace(){
         String uuidString = getString(getColumnIndex(PlaceDBSchema.PlaceTable.Cols.UUID));
         String name = getString(getColumnIndex(PlaceDBSchema.PlaceTable.Cols.NAME));
+        String lat = getString(getColumnIndex(PlaceDBSchema.PlaceTable.Cols.LAT));
+        String lon = getString(getColumnIndex(PlaceDBSchema.PlaceTable.Cols.LON));
 
         Place p = new Place(UUID.fromString(uuidString));
         p.setName(name);
+        p.setLat(lat);
+        p.setLon(lon);
 
         return p;
     }

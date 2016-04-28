@@ -9,8 +9,8 @@ public class Place {
     private UUID mID;
     private String mName;
     private String mPhoto;
-    private double mLat;
-    private double mLon;
+    private String mLat;
+    private String mLon;
 
     public Place() {
         mID = UUID.randomUUID();
@@ -40,19 +40,19 @@ public class Place {
         mPhoto = photo;
     }
 
-    public double getLat() {
+    public String getLat() {
         return mLat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(String lat) {
         mLat = lat;
     }
 
-    public double getLon() {
+    public String getLon() {
         return mLon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(String lon) {
         mLon = lon;
     }
 

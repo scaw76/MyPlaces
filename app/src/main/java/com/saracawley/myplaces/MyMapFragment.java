@@ -81,6 +81,7 @@ public class MyMapFragment extends SupportMapFragment{
         });
         UUID place_id = (UUID) getArguments().getSerializable(ARG_MAP_PLACE_ID);
         mPlace = PlaceManger.get(getActivity()).getPlace(place_id);
+        Log.d(TAG, "get my Place lat lon "+ mPlace.getLat() +" "+ mPlace.getLon());
     }
     @Override
     public void onStart() {
@@ -118,10 +119,10 @@ public class MyMapFragment extends SupportMapFragment{
     private void updateUI(){
        // mPlaceLocation.setLatitude(mPlace.getLat());
         //mPlaceLocation.setLongitude(mPlace.getLon());
-        if(mMap == null || mCurrentLocation == null){ //|| mPlaceLocation == null){
+        if(mMap == null || mCurrentLocation == null ){//||mPlace.getLat()==0|| mPlace.getLon()==0){ //|| mPlaceLocation == null){
             return;
         }
-        LatLng itemPoint = new LatLng(mPlace.getLat(), mPlace.getLon());
+        LatLng itemPoint = new LatLng(Double.parseDouble(mPlace.getLat()), Double.parseDouble(mPlace.getLon()));
 
         LatLng myPoint = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
@@ -131,11 +132,11 @@ public class MyMapFragment extends SupportMapFragment{
                 .position(myPoint);
 
         mMap.clear();
-        //mMap.addMarker(itemMarker);
+        mMap.addMarker(itemMarker);
         mMap.addMarker(myMarker);
 
         LatLngBounds bounds = new LatLngBounds.Builder()
-                //.include(itemPoint)
+                .include(itemPoint)
                 .include(myPoint)
                 .build();
         int margin = getResources().getDimensionPixelSize(R.dimen.map_inset_margin);
