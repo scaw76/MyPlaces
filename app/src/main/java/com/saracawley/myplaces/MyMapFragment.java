@@ -3,33 +3,42 @@ package com.saracawley.myplaces;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.UUID;
 
 /**
  * Created by sara on 4/28/2016.
  */
-public class MyMapFragment extends Fragment{
+public class MyMapFragment extends SupportMapFragment{
     private static final String TAG = "MyMapFragment";
     private static final String ARG_MAP_PLACE_ID = "place_id";
+    private GoogleMap mMap;
     private Place mPlace;
+    private Location mCurrentLocation;
+    private Location mPlaceLocation;
+
     private GoogleApiClient mClient;
 
     public static MyMapFragment newInstance(UUID placeID) {
@@ -63,6 +72,13 @@ public class MyMapFragment extends Fragment{
                     }
                 })
                 .build();
+        getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                updateUI();
+            }
+        });
         UUID place_id = (UUID) getArguments().getSerializable(ARG_MAP_PLACE_ID);
         mPlace = PlaceManger.get(getActivity()).getPlace(place_id);
     }
@@ -77,12 +93,6 @@ public class MyMapFragment extends Fragment{
     public void onStop() {
         super.onStop();
         mClient.disconnect();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -105,7 +115,33 @@ public class MyMapFragment extends Fragment{
                 return super.onOptionsItemSelected(item);
         }
     }
+    private void updateUI(){
+       // mPlaceLocation.setLatitude(mPlace.getLat());
+        //mPlaceLocation.setLongitude(mPlace.getLon());
+        if(mMap == null || mCurrentLocation == null){ //|| mPlaceLocation == null){
+            return;
+        }
+        LatLng itemPoint = new LatLng(mPlace.getLat(), mPlace.getLon());
 
+        LatLng myPoint = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+
+        MarkerOptions itemMarker = new MarkerOptions()
+                .position(itemPoint);
+        MarkerOptions myMarker = new MarkerOptions()
+                .position(myPoint);
+
+        mMap.clear();
+        //mMap.addMarker(itemMarker);
+        mMap.addMarker(myMarker);
+
+        LatLngBounds bounds = new LatLngBounds.Builder()
+                //.include(itemPoint)
+                .include(myPoint)
+                .build();
+        int margin = getResources().getDimensionPixelSize(R.dimen.map_inset_margin);
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds,margin);
+        mMap.animateCamera(update);
+    }
 
     private void findMe() {
         LocationRequest request = LocationRequest.create();
@@ -123,8 +159,11 @@ public class MyMapFragment extends Fragment{
                 .requestLocationUpdates(mClient, request, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
+                        //Toast.makeText(getActivity(),"Got a fix:" + location, Toast.LENGTH_SHORT).show();
                         Toast.makeText(getActivity(),"Got a fix:" + location, Toast.LENGTH_SHORT).show();
                         Log.i(TAG, "Got a fix:" + location);
+                        //mCurrentLocation.set(location);
+                        new SearchTask().execute(location);
                     }
                 });
     }
@@ -139,4 +178,22 @@ public class MyMapFragment extends Fragment{
             }
         }
     }
+
+    private class SearchTask extends AsyncTask<Location, Void, Void> {
+        private Location mLocation;
+
+        @Override
+        protected Void doInBackground(Location... params) {
+            mLocation = params[0];
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mCurrentLocation = mLocation;
+            updateUI();
+        }
+    }
+
 }

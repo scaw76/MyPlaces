@@ -59,4 +59,5 @@ public class Place {
     public String getPhotoFileName(){
         return "IMG_" +getID().toString()+".jpg";
     }
+
 }
