@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.util.Log;
 
 import com.saracawley.myplaces.database.PlaceBaseHelper;
 import com.saracawley.myplaces.database.PlaceCursorWrapper;
@@ -83,6 +84,12 @@ public class PlaceManger {
     public void deletePlace(Place p){
         //mPlaces.remove(p);
         mDatabase.delete(PlaceTable.NAME, PlaceTable.Cols.UUID + " =? ", new String[] { p.getID().toString() });
+        File file = getPhotoFile(p);
+
+        if(file != null){
+            boolean deleted = file.delete();
+            Log.i("PlaceManager", "deleted " + deleted);
+        }
     }
     private static ContentValues getContentValues(Place place){
         ContentValues values = new ContentValues();
