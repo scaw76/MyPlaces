@@ -164,7 +164,7 @@ public class MyPlaceFragment extends Fragment {
 
         try {
             ExifInterface exifInterface = new ExifInterface(file);
-            exif += "Image La t" + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+            exif += "Image Lat" + exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
             exif += "Image Lon " + exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
         } catch (IOException e) {
             Log.e("MyPlaceFragment", "ReadExif " + e);
@@ -178,18 +178,27 @@ public class MyPlaceFragment extends Fragment {
             return;
         }
         if (requestCode == REQUEST_PHOTO) {
-            try {
-                ExifInterface exifInterface = new ExifInterface(mPhotoFile.getPath());
-                String lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                String lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // set lat and lon in mPlace
-            String exif = ReadExif(mPhotoFile.getPath());
-            Log.i(TAG, exif);
+            getImageLatLon();
             updatePhotoView();
         }
+    }
+    void getImageLatLon(){
+        try {
+            ExifInterface exifInterface = new ExifInterface(mPhotoFile.getPath());
+            float[] latLong = new float[2];
+            boolean hasLatLong = exifInterface.getLatLong(latLong);
+            if (hasLatLong) {
+                mPlace.setLat(latLong[0]);
+                mPlace.setLon(latLong[1]);
+                Log.i(TAG,"Latitude: " + latLong[0]);
+                Log.i(TAG,"Longitude: " + latLong[1]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // set lat and lon in mPlace
+        String exif = ReadExif(mPhotoFile.getPath());
+
     }
 
     @Override
