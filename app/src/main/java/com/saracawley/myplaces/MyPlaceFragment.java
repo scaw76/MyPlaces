@@ -1,18 +1,15 @@
 package com.saracawley.myplaces;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,12 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +41,7 @@ public class MyPlaceFragment extends Fragment {
     private ImageButton mImageButton;
     private ImageView mPhotoView;
 
-    private GoogleApiClient mClient;
+    //private GoogleApiClient mClient;
 
 
     public static MyPlaceFragment newInstance(UUID placeID) {
@@ -66,7 +57,7 @@ public class MyPlaceFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+/*
         mClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
@@ -82,12 +73,12 @@ public class MyPlaceFragment extends Fragment {
                     }
                 })
                 .build();
-
+*/
         UUID place_id = (UUID) getArguments().getSerializable(ARG_PLACE_ID);
         mPlace = PlaceManger.get(getActivity()).getPlace(place_id);
         mPhotoFile = PlaceManger.get(getActivity()).getPhotoFile(mPlace);
     }
-
+/*
     @Override
     public void onStart() {
         super.onStart();
@@ -100,7 +91,7 @@ public class MyPlaceFragment extends Fragment {
         super.onStop();
         mClient.disconnect();
     }
-
+*/
     @Override
     public void onPause() {
         super.onPause();
@@ -207,8 +198,7 @@ public class MyPlaceFragment extends Fragment {
         inflater.inflate(R.menu.fragment_place, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_locate);
-        searchItem.setEnabled(mClient.isConnected());
-
+        searchItem.setEnabled(true);
 
     }
 
@@ -220,13 +210,16 @@ public class MyPlaceFragment extends Fragment {
                 getActivity().finish();
                 return true;
             case R.id.action_locate:
-                findMe();
+                Log.i(TAG,"pushed: action locate ");
+                //findMe();
+                Intent i = MyMapActivity.newIntent(getActivity(),mPlace.getID());
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
+/*
     private void findMe() {
         LocationRequest request = LocationRequest.create();
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -248,6 +241,7 @@ public class MyPlaceFragment extends Fragment {
                     }
                 });
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
@@ -258,6 +252,7 @@ public class MyPlaceFragment extends Fragment {
             }
         }
     }
+    */
 
     private void updatePhotoView(){
         if(mPhotoFile == null || !mPhotoFile.exists()){
