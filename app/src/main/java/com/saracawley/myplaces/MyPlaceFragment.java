@@ -64,8 +64,12 @@ public class MyPlaceFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
         PlaceManger.get(getActivity()).updatePlace(mPlace);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Nullable
@@ -97,7 +101,7 @@ public class MyPlaceFragment extends Fragment {
         mPhotoView = (ImageView) v.findViewById(R.id.image);
         updatePhotoView();
         String exif = ReadExif(mPhotoFile.getPath());
-        Log.i(TAG, exif);
+        //Log.i(TAG, exif);
 
         mNameTextView.setText(mPlace.getName());
         mNameTextView.addTextChangedListener(new TextWatcher() {
@@ -134,7 +138,7 @@ public class MyPlaceFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("made it ", "here");
+        //Log.i("made it ", "here");
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -152,11 +156,11 @@ public class MyPlaceFragment extends Fragment {
                 mPlace.setLat(String.valueOf(latLong[0]));
                 mPlace.setLon(String.valueOf(latLong[1]));
                 PlaceManger.get(getActivity()).updatePlace(mPlace);
-                Log.i(TAG,"Latitude: " + latLong[0]);
-                Log.i(TAG,"Longitude: " + latLong[1]);
+                //Log.i(TAG,"Latitude: " + latLong[0]);
+                //Log.i(TAG,"Longitude: " + latLong[1]);
             }
         } catch (IOException e) {
-            Log.e(TAG,"Get image lat and lon "+ e);
+            //Log.e(TAG,"Get image lat and lon "+ e);
             //e.printStackTrace();
         }
         // set lat and lon in mPlace
@@ -182,7 +186,7 @@ public class MyPlaceFragment extends Fragment {
                 getActivity().finish();
                 return true;
             case R.id.action_locate:
-                Log.i(TAG,"pushed: action locate ");
+                //Log.i(TAG,"pushed: action locate ");
                 Intent i = MyMapActivity.newIntent(getActivity(),mPlace.getID());
                 startActivity(i);
                 return true;

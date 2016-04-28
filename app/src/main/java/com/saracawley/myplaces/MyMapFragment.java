@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,7 +80,7 @@ public class MyMapFragment extends SupportMapFragment{
         });
         UUID place_id = (UUID) getArguments().getSerializable(ARG_MAP_PLACE_ID);
         mPlace = PlaceManger.get(getActivity()).getPlace(place_id);
-        Log.d(TAG, "get my Place lat lon "+ mPlace.getLat() +" "+ mPlace.getLon());
+        //Log.d(TAG, "get my Place lat lon "+ mPlace.getLat() +" "+ mPlace.getLon());
     }
     @Override
     public void onStart() {
@@ -109,7 +108,7 @@ public class MyMapFragment extends SupportMapFragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_locate:
-                Log.i(TAG,"pushed: action locate ");
+                //Log.i(TAG,"pushed: action locate ");
                 findMe();
                 return true;
             default:
@@ -161,8 +160,8 @@ public class MyMapFragment extends SupportMapFragment{
                     @Override
                     public void onLocationChanged(Location location) {
                         //Toast.makeText(getActivity(),"Got a fix:" + location, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getActivity(),"Got a fix:" + location, Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "Got a fix:" + location);
+                        //Toast.makeText(getActivity(),"Got a fix:" + location, Toast.LENGTH_SHORT).show();
+                        //Log.i(TAG, "Got a fix:" + location);
                         //mCurrentLocation.set(location);
                         new SearchTask().execute(location);
                     }
